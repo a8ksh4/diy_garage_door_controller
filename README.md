@@ -36,7 +36,7 @@ And the resulting possible actions are:
 * "sleep_wait" - Simply sleeps for a few seconds. This is to wait for the door to move and rate limit actions initiated by the 3-way switch.
 
 ### State and Action Table:
-```
+```python
 states_actions = {
     #Prior          Now             Door    3-way
     #Door   Expect  Door  Expect    Button  Relay  Sleep
@@ -60,7 +60,8 @@ states_actions = {
 
 We have a few lines to initialize all of the needed GPIO Pins and set our WAIT_TIME. The wait time should be a little longer than it takes for your garage door to open or close.
 
-```import board
+```python
+import board
 from digitalio import DigitalInOut, Direction, Pull
 import time
 
@@ -81,8 +82,8 @@ door_button_relay.direction = Direction.OUTPUT
 WAIT_TIME = 5
 ```
 
-And The main loop is pretty simple.  Print statements are for debugging over serial on initial wire-up.
-```
+And The main loop is pretty simple.  Record the previous state, chech the current state, look up needed actions in the table, an perform any actions given.  Print statements are for debugging over serial on initial wire-up.
+```python
 now_door = door_is_open.value       # initialize
 now_expect = three_way_relay.value  # initialize
 
