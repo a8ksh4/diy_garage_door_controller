@@ -64,10 +64,6 @@ We have a few lines to initialize all of the needed GPIO Pins and set our WAIT_T
 from digitalio import DigitalInOut, Direction, Pull
 import time
 
-print("Hello World!")
-
-# GPIO Ports:
-print(dir(board))
 door_is_open = DigitalInOut(board.GP15)
 door_is_open.direction = Direction.INPUT
 door_is_open.pull = Pull.DOWN
@@ -87,8 +83,8 @@ WAIT_TIME = 5
 
 And The main loop is pretty simple.  Print statements are for debugging over serial on initial wire-up.
 ```
-now_door = door_is_open.value
-now_expect = three_way_relay.value
+now_door = door_is_open.value       # initialize
+now_expect = three_way_relay.value  # initialize
 
 while True:
     time.sleep(1)
