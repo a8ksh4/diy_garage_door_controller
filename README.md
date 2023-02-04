@@ -22,6 +22,8 @@ That said, here are a few precautions I have implemented in this setup:
 * Smart switch is "on" if the door is open, and "off" if it is closed.
 * Toggling the smart switch will open or close the door, and if, e.g., the door fails to close, the smart switch should show it as open after the timeout.
 * Minimal rate-limiting of operations from 3-way switch.  If the smart switch is toggled durng a wait period of an ongoing door open or close, the smart switch is ignored and updated to show the actual state of the door.
+* Power outages should not result in unhandled states or accidental door open/close operations. 
+* Controller should never trigger an anomalous door open/close event.
 
 ## Programming
 The program that runs on the micro-controller needs to be simple enough to be certain that it will function as intended. This implementation does that by making a table of previous and current state of the door and 3-way switch, and mapping all possible states to specific actions.
