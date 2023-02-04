@@ -14,7 +14,11 @@ That said, here are a few precautions I have implemented in this setup:
 * Using a properly grounded and gfci protected circuit to power it.
 * Physical isolaton of 120vac and 5vdc electronics via relays.
 
-## Circuit Diagram
+## Wiring Diagram
+![Wiring Diagram](/images/wiring_diagram.jpg "Whiteboard"
+![Three Way Wiring](/images/three_way_wiring.jpg "Three Way Wiring Closeup"
+![Pico PCB Top](/images/pico_pcb_top.jpg "Pico PCB Top")
+![Pico PCG Bototm](/images/pico_pcb_bottom.jpg "Pico PCB Bottom")
 
 ## Required Features
 * Simple, reliable, behavior.
