@@ -15,8 +15,15 @@ That said, here are a few precautions I have implemented in this setup:
 * Physical isolaton of 120vac and 5vdc electronics via relays.
 
 ## Wiring Diagram
-![Wiring Diagram](/images/wiring_diagram.jpg "Whiteboard"
-![Three Way Wiring](/images/three_way_wiring.jpg "Three Way Wiring Closeup"
+![Wiring Diagram](/images/wiring_diagram.jpg "Whiteboard")
+
+Thats maybe not the best diagram but shows overall how stuff is connected.  Here's a photo of the complete wiring everything up during testing.  The 5v power for the pico isn't connected while I'm running it off USB, and I don't have the relay that operates the door switch for the garage door opener conected to anything - it's enough to hear it click click during testing. 
+![Overall Wiring](/images/wiring_overview.jpg "Wiring Overview")
+
+A little more detail on the connections between the relays and the 3-way switch:
+![Three Way Wiring](/images/three_way_wiring.jpg "Three Way Wiring Closeup")
+
+And details on how the pico was put on a perfboard with connectors for power and gpio to interface all of the low voltage dc stuff.
 ![Pico PCB Top](/images/pico_pcb_top.jpg "Pico PCB Top")
 ![Pico PCG Bototm](/images/pico_pcb_bottom.jpg "Pico PCB Bottom")
 
@@ -28,6 +35,18 @@ That said, here are a few precautions I have implemented in this setup:
 * Minimal rate-limiting of operations from 3-way switch.  If the smart switch is toggled durng a wait period of an ongoing door open or close, the smart switch is ignored and updated to show the actual state of the door.
 * Power outages should not result in unhandled states or accidental door open/close operations. 
 * Controller should never trigger an anomalous door open/close event.
+
+### Parts List:
+* Pi pico with circuitpython loaded
+* Smart 3-way switch: https://www.amazon.com/gp/product/B083JKTMYQ
+* Hall sensor for detecting when the door is closed - you could also use a physical switch, like a limit switch from a 3d printer: https://www.amazon.com/dp/B09PH2KD4B
+* Any usb wall-wart you can scavenge guts from and use for 5v power
+* 5vdc relays that can be operated by the pico - these have 5v and ground connections, and a 3.3v signal connection that can be triggered by the pico gpio pins: https://www.amazon.com/dp/B08W3XDNGK
+* 120vac relay that can be triggered by the 3-way switch: https://www.amazon.com/dp/B08HLXQPRP
+* Perfboard and a bit of copper connecting wire
+* Ferrules and crimping tool: https://www.amazon.com/gp/product/B073TZ5BBG
+* Bits of stranded wire to connect stuff
+* Bell wire to run down to the door sensor and to the garage door opener to trigger it.
 
 ## Programming
 The program that runs on the micro-controller needs to be simple enough to be certain that it will function as intended. This implementation does that by making a table of previous and current state of the door and 3-way switch, and mapping all possible states to specific actions.
