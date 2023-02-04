@@ -1,4 +1,4 @@
-# diy_garage_door_controller
+# DIY Garage door remote controller using a smart 3-way switch
 For lack of a simple garage door controller to work with google home, this is an implementation using a smart 3-way switch, a few relays, and a pi pico microcontroller.
 
 This setup should work with any smart 3-way switch that allows you to use a single smart switch in the 3-way circuit. E.g. the Kasa HS210 which is only about $15.  The cool thing about using a 3-way switch is that it can controll the door, and you can also toggle the relay attached to it to signal back that the door has been opened or closed.  So someone in the garage can open the door with their remote and the smart switch will turn "on" in its app to indicate that the door is open.  Or if you you use the smart switch to close the door, it will show as closed during the wait period, but report open again if it failed to close. 
@@ -17,8 +17,8 @@ That said, here are a few precautions I have implemented in this setup:
 ## Circuit Diagram
 
 ## Required Features
-* Garage door can stil be controlled from existing wireless controllers.
 * Simple, reliable, behavior.
+* Garage door can stil be controlled from existing wireless controllers.
 * Smart switch is "on" if the door is open, and "off" if it is closed.
 * Toggling the smart switch will open or close the door, and if, e.g., the door fails to close, the smart switch should show it as open after the timeout.
 * Minimal rate-limiting of operations from 3-way switch.  If the smart switch is toggled durng a wait period of an ongoing door open or close, the smart switch is ignored and updated to show the actual state of the door.
