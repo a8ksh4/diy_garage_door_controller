@@ -16,6 +16,7 @@ I call the states
 * "prior_expected" - Whetehr the door was expected to be open previously
 * "now_door" - Whether the door is open now
 * "now_expected" - Whether the door is expected to be open now
+
 And the resulting possible actions are:
 * "push_door_button" - Closes and opens the relay connected to the garage door opener to tell it to open or close the door.
 * "toggle_relay" - Alternates the state of the relay connected to the 3-way switch to signal to it a change in the state of the door
