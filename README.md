@@ -17,23 +17,29 @@ That said, here are a few precautions I have implemented in this setup:
 ## Circuit Diagram
 
 ## Required Features
-* Garage door can be controlled from existing wireless controllers
-* Opened/Closed state of the door should be shown in google home (or your smart home interface of choice)
-* Should be able to press 3-way switch or toggle it in the app to open or close the door, and see the result in the app.  E.g. if I try to close it but after defined wait time it is open, toggle the relay attached to the 3-way to signal that the door is stil open. 
+* Garage door can stil be controlled from existing wireless controllers.
+* Simple, reliable, behavior.
+* Smart switch is "on" if the door is open, and "off" if it is closed.
+* Toggling the smart switch will open or close the door, and if, e.g., the door fails to close, the smart switch should show it as open after the timeout.
+* Minimal rate-limiting of operations from 3-way switch.  If the smart switch is toggled durng a wait period of an ongoing door open or close, the smart switch is ignored and updated to show the actual state of the door.
 
 ## Programming
-The program that runs on the micro-controller needs to be simple enough to be certain that it will function as intended. The best way I came up with to do this it to make a list of previous and current states of the garage door and the three-way switch and the actions that should take place for all combinations of these states.  
+The program that runs on the micro-controller needs to be simple enough to be certain that it will function as intended. This implementation does that by making a table of previous and current state of the door and 3-way switch, and mapping all possible states to specific actions.
 
-I call the states 
-* "prior_door" - Whether the door was open previously
+The state names:
+* "prior_door" - True/False - Whether the door was open previously
 * "prior_expected" - Whetehr the door was expected to be open previously
 * "now_door" - Whether the door is open now
 * "now_expected" - Whether the door is expected to be open now
 
 And the resulting possible actions are:
-* "push_door_button" - Closes and opens the relay connected to the garage door opener to tell it to open or close the door.
-* "toggle_relay" - Alternates the state of the relay connected to the 3-way switch to signal to it a change in the state of the door
+* "push_door_button" - Close and open the relay connected to the garage door opener to tell it to open or close the door.
+* "toggle_relay" - Alternates the state of the relay connected to the 3-way switch to signal to it a change in the state of the door.
 * "sleep_wait" - Simply sleeps for a few seconds. This is to wait for the door to move and rate limit actions initiated by the 3-way switch.
+
+For the most part, opening the door is exactly the same as closing the door.  The only anomaly in the table below is "(False, False, True,  False)":  The door was previously closed and previously expected to be closed, but now it's open and expected to be closed. The result is toggling the relay to signal the change to the smart switch, and also we have a sleep operation since we see the door as open the moment it starts to move, but it won't be fully open until after the WAIT_TIME.  Conversely, when we see that the door has closed, we don't need the sleep operation to block commands from the smart switch.
+
+There are a few states that are impossible or unlikely to ever actually be encountered and result in no behavior despite some change from "prior" to "now". For example: (True,  False, False, False). The door was previously open, but previously expected to be closed, and it is now closed and expected to be closed.  Nothing to do here.
 
 ### State and Action Table:
 ```python
@@ -42,7 +48,7 @@ states_actions = {
     #Door   Expect  Door  Expect    Button  Relay  Sleep
     (False, False, False, False):   (False, False, False),
     (False, False, False, True):    (True,  False, True),  # 3-way requested door action
-    (False, False, True,  False):   (False, True,  True),  # Update 3-way to reflect door
+    (False, False, True,  False):   (False, True,  True),  # Update 3-way to reflect door opened
     (False, False, True,  True):    (False, False, False), # n/a prv action
     (False, True,  False, False):   (False, False, False),
     (False, True,  False, True):    (False, True,  False), # Err on prev response to 3-way
@@ -52,7 +58,7 @@ states_actions = {
     (True,  False, True,  False):   (False, True,  False), # Err on prev response to 3-way
     (True,  False, True,  True):    (False, False, False),
     (True,  True,  False, False):   (False, False, False),
-    (True,  True,  False, True):    (False, True,  False), # Update 3-way to reflect door
+    (True,  True,  False, True):    (False, True,  False), # Update 3-way to reflect door closed
     (True,  True,  True,  False):   (True,  False, True),  # 3-way requested door action
     (True,  True,  True,  True):    (False, False, False)
 }
