@@ -25,7 +25,7 @@ A little more detail on the connections between the relays and the 3-way switch:
 
 And details on how the pico was put on a perfboard with connectors for power and gpio to interface all of the low voltage dc stuff.
 ![Pico PCB Top](/images/pico_pcb_top.jpg "Pico PCB Top")
-![Pico PCG Bototm](/images/pico_pcb_bottom.jpg "Pico PCB Bottom")
+![Pico PCB Bottom](/images/pico_pcb.jpg "Pico PCB Bottom")
 
 ## Required Features
 * Simple, reliable, behavior.
