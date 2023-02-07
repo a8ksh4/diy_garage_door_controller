@@ -5,15 +5,6 @@ This setup should work with any smart 3-way switch that allows you to use a sing
 
 On the garage door opener end of things, it would need to be the type that will open/close by shorting the pins of the opener that normally would go to a button in the garage.  Some newer units may not support this, but you could u connect this to a wireless remote as an alternative.
 
-## Warning regarding 120vac electricity
-This project uses 120v ac power and plugs into an outlet in the house.  120vac can kill you.  If you are shocked, it can put your heart into an arythmea and you can die hours later.  It can kill you in other ways.  I am not an electrician or an expert and you should not replicate anything I have posted here.  I am not responseble if you hurt yourself or others or burn your house down.  
-
-That said, here are a few precautions I have implemented in this setup:
-* Covering any pins or wires with 120v with hot glue, paper, and electrical tape to protect against accidental touches. 
-* Securing all electronics in the enclosure.
-* Using a properly grounded and gfci protected circuit to power it.
-* Physical isolaton of 120vac and 5vdc electronics via relays.
-
 ## Wiring Diagram
 ![Wiring Diagram](/images/wiring_diagram.jpg "Whiteboard")
 
@@ -35,6 +26,7 @@ And details on how the pico was put on a perfboard with connectors for power and
 * Minimal rate-limiting of operations from 3-way switch.  If the smart switch is toggled durng a wait period of an ongoing door open or close, the smart switch is ignored and updated to show the actual state of the door.
 * Power outages should not result in unhandled states or accidental door open/close operations. 
 * Controller should never trigger an anomalous door open/close event.
+* Option to disable smart switch opening the door, only closing it.  Incorporating this via a 3-way switch on the box.
 
 ### Parts List:
 * Pi pico with circuitpython loaded
@@ -145,3 +137,12 @@ while True:
         print(f'Sleeping {WAIT_TIME} seconds')
         time.sleep(WAIT_TIME)
 ```
+
+## Warning regarding 120vac electricity
+This project uses 120v ac power and plugs into an outlet in the house.  120vac can kill you.  If you are shocked, it can put your heart into an arythmea and you can die hours later.  It can kill you in other ways.  I am not an electrician or an expert and you should not replicate anything I have posted here.  I am not responseble if you hurt yourself or others or burn your house down.  
+
+That said, here are a few precautions I have implemented in this setup:
+* Covering any pins or wires with 120v with hot glue, paper, and electrical tape to protect against accidental touches. 
+* Securing all electronics in the enclosure.
+* Using a properly grounded and gfci protected circuit to power it.
+* Physical isolaton of 120vac and 5vdc electronics via relays.
